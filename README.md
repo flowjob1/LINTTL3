@@ -1,66 +1,69 @@
-# Библиотека LINTTL3 для Arduino
+# LINTTL3 Library for Arduino
 
-Библиотека для управления модулем LINTTL3, который преобразует сигналы TTL/UART в LIN и обратно. Модуль использует микросхему TJA1021 и поддерживает скорость передачи данных до 20 кбит/с.
+Library for controlling the LINTTL3 module, which converts TTL/UART signals to LIN and vice versa. The module uses the TJA1021 chip and supports data transfer rates up to 20 kbit/s.
 
-## Установка
+## Installation
 
-1. Скачайте архив с библиотекой.
-2. Распакуйте архив в папку `libraries` вашей Arduino IDE.
-3. Перезапустите Arduino IDE.
+1. Download the archive with the library.
+2. Unzip the archive into the `libraries` folder of your Arduino IDE.
+3. Restart the Arduino IDE.
 
-## Подключение модуля
+## Module Connection
 
-Модуль LINTTL3 имеет 8 контактов:
+The LINTTL3 module has 8 pins:
 
-- **Сторона 1:**
-  - RX: Прием данных от LIN-шины.
-  - SLP: Управление режимом сна.
-  - TX: Передача данных на LIN-шину.
-  - GND: Земля.
+* **Side 1:**
+  - RX: Data reception from the LIN bus.
+  - SLP: Sleep mode control.
+  - TX: Data transmission to the LIN bus.
+  - GND: Ground.
+* **Side 2:**
+  - +12V: Module power supply (12V/24V).
+  - INH: Control of external voltage regulator (used in master mode).
+  - LIN: LIN bus.
+  - GND: Ground.
 
-- **Сторона 2:**
-  - +12V: Питание модуля (12V/24V).
-  - INH: Управление внешним регулятором напряжения (используется в режиме мастера).
-  - LIN: LIN-шина.
-  - GND: Земля.
+### Connection to Arduino:
 
-### Подключение к Arduino:
+* **RX**: Connect to the RX pin on the Arduino (or any other pin for software UART).
+* **TX**: Connect to the TX pin on the Arduino (or any other pin for software UART).
+* **SLP**: Connect to any digital Arduino pin to control sleep mode.
+* **INH**: Connect to any digital Arduino pin to control master mode.
+* **GND**: Connect to GND on the Arduino.
+* **+12V**: Connect to a 12V/24V power source.
 
-- **RX**: Подключите к пину RX на Arduino (или любому другому пину для программного UART).
-- **TX**: Подключите к пину TX на Arduino (или любому другому пину для программного UART).
-- **SLP**: Подключите к любому цифровому пину Arduino для управления режимом сна.
-- **INH**: Подключите к любому цифровому пину Arduino для управления режимом мастера.
-- **GND**: Подключите к GND на Arduino.
-- **+12V**: Подключите к источнику питания 12V/24V.
+## Usage
 
-## Использование
-Основные функции
-void begin(): Инициализация модуля.
+Basic functions
+void begin(): Module initialization.
 
-void sleep(): Переводит модуль в режим сна.
+void sleep(): Puts the module into sleep mode.
 
-void wakeUp(): Выводит модуль из режима сна.
+void wakeUp(): Wakes the module up from sleep mode.
 
-void sendLIN(byte data): Отправляет данные на LIN-шину.
+void sendLIN(byte data): Sends data to the LIN bus.
 
-byte receiveLIN(): Читает данные с LIN-шины.
+byte receiveLIN(): Reads data from the LIN bus.
 
-void setMasterMode(bool isMaster): Устанавливает режим мастера или подчиненного устройства.
+void setMasterMode(bool isMaster): Sets master or slave mode.
 
-### Инициализация
+### Initialization
 
 ```cpp
 #include <LINTTL3.h>
 
-// Для аппаратного UART
+// For hardware UART
 LINTTL3 linModule(Serial, SLP_PIN, INH_PIN);
 
-// Для программного UART (SoftwareSerial)
+// For software UART (SoftwareSerial)
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial(RX_PIN, TX_PIN);
 LINTTL3 linModule(mySerial, SLP_PIN, INH_PIN);
 
 void setup() {
-  linModule.begin(); // Инициализация модуля
-  linModule.setMasterMode(true); // Устанавливаем режим мастера
+  linModule.begin(); // Module initialization
+  linModule.setMasterMode(true); // Set master mode
+
 }
+
+```
